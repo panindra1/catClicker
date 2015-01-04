@@ -19,8 +19,7 @@ $(document).ready(function(){
 			else {
 				model.catClickCount[val] = model.catClickCount[val] + 1;	
 			}
-			
-			$('#clickCount' + val).text(model.catClickCount[val]);
+			view.changeCountText(val, model.catClickCount[val]);
 		}
 	};
 
@@ -34,6 +33,10 @@ $(document).ready(function(){
 				controller.addCount(parseInt(event.data.value));
 			});		
 		  }
+		},
+
+		changeCountText: function(val, modelVal) {		
+			$('#clickCount' + val).text(modelVal);
 		}
 	};
 	
