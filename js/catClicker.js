@@ -4,21 +4,27 @@ $(document).ready(function(){
 
 		catCount : 5,
 		catClickCount : [],
-		catNames : ["cuteCat", "prettyCat", "niceCat", "cutiePie", "NicePic"]
+		catNames : ["cuteCat", "prettyCat", "niceCat", "cutiePie", "NicePic"],
+
+		init:function() {
+			for(var i = 0; i < model.catCount; i++) {
+				model.catClickCount[i] = 0;
+			}
+ 		},
+
+ 		updateCount: function(val) {
+ 			model.catClickCount[val] = model.catClickCount[val] + 1;
+ 		}
 	};
 
 	var controller = {
 		init : function() {
-			//model.init();
+			model.init();
 			view.init();
 		},
 		addCount: function(val) {
-			if(isNaN(model.catClickCount[val])) {
-					model.catClickCount[val] = 1;	
-			}
-			else {
-				model.catClickCount[val] = model.catClickCount[val] + 1;	
-			}
+			//model.catClickCount[val] = model.catClickCount[val] + 1;	
+			model.updateCount(val);
 			view.changeCountText(val, model.catClickCount[val]);
 		}
 	};
