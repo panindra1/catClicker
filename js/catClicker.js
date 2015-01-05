@@ -1,4 +1,3 @@
-
 $(document).ready(function(){
 	var model = {
 
@@ -20,25 +19,47 @@ $(document).ready(function(){
 	var controller = {
 		init : function() {
 			model.init();
-			view.init();
+			//view.init();
+			listView.init();
 		},
+		selectCat: function(val) {
+			//alert();
+			view.render(val, model.catClickCount[val]);
+		},
+
 		addCount: function(val) {
-			//model.catClickCount[val] = model.catClickCount[val] + 1;	
 			model.updateCount(val);
 			view.changeCountText(val, model.catClickCount[val]);
 		}
 	};
 
-	var view = {
+	var listView = {
 		init: function() {
 			for (var i = 0; i < model.catCount; i++) {
-			$('#dynamicImage').append("<div><label>" +model.catNames[i]+"</label></div><br />"); 
-			$('#dynamicImage').append("<img id = 'image"+i+"' src= 'images/image" +i+".jpg' width = 300px height = 300px> </img>" );
-			$('#dynamicImage').append("<div><label id = 'clickCount"+i+"'></label></div><br />"); 
-			$('#image'+i).on( "click", { value: i }, function( event ) {
-				controller.addCount(parseInt(event.data.value));
-			});		
-		  }
+				$('#catButtons').append("<button id= '"+model.catNames[i]+i+"'>" +model.catNames[i]+"</button>"); 
+				$('#'+model.catNames[i]+i).on( "click", { value: i }, function( event ) {
+					controller.selectCat(parseInt(event.data.value));
+				});
+			}
+		},
+		render: function() {
+		}
+	};
+
+	var view = {
+		init: function() {
+		},
+
+		render: function(index, val) {
+			//alert(value);
+			$('#dynamicImage').html('');
+			$('#dynamicImage').append("<div><label>" +model.catNames[index]+"</label></div><br /> "); 
+			$('#dynamicImage').append("<img id = 'image"+index+"' src= 'images/image" +index+".jpg' width = 300px height = 300px> </img>" );
+			$('#dynamicImage').append("<div><label id = 'clickCount"+index+"'>"+val+"</label></div><br />"); 
+			
+			$('#image'+index).on( "click", { value: index }, function( event ) {
+					controller.addCount(parseInt(event.data.value));
+			});
 		},
 
 		changeCountText: function(val, modelVal) {		
