@@ -19,7 +19,7 @@ $(document).ready(function(){
 	var controller = {
 		init : function() {
 			model.init();
-			//view.init();
+			view.init();
 			listView.init();
 		},
 		selectCat: function(val) {
@@ -29,7 +29,7 @@ $(document).ready(function(){
 
 		addCount: function(val) {
 			model.updateCount(val);
-			view.changeCountText(val, model.catClickCount[val]);
+			view.changeCountText(model.catClickCount[val]);
 		}
 	};
 
@@ -48,22 +48,21 @@ $(document).ready(function(){
 
 	var view = {
 		init: function() {
+			this.render(0, 0);
 		},
 
 		render: function(index, val) {
-			//alert(value);
-			$('#dynamicImage').html('');
-			$('#dynamicImage').append("<div><label>" +model.catNames[index]+"</label></div><br /> "); 
-			$('#dynamicImage').append("<img id = 'image"+index+"' src= 'images/image" +index+".jpg' width = 300px height = 300px> </img>" );
-			$('#dynamicImage').append("<div><label id = 'clickCount"+index+"'>"+val+"</label></div><br />"); 
-			
+			$('#catName').text(model.catNames[index]);
+			$('#dynamicImage').html("<img id = 'image"+index+"' src= 'images/image" +index+".jpg' width = 300px height = 300px> </img>" );
+			$('#catCount').text(val);
+
 			$('#image'+index).on( "click", { value: index }, function( event ) {
-					controller.addCount(parseInt(event.data.value));
+				controller.addCount(parseInt(event.data.value));
 			});
 		},
 
-		changeCountText: function(val, modelVal) {		
-			$('#clickCount' + val).text(modelVal);
+		changeCountText: function(modelVal) {		
+			$('#catCount').text(modelVal);
 		}
 	};
 	
