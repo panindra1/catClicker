@@ -3,44 +3,41 @@ $(document).ready(function(){
 
 		catCount : 5,
 		curCatNum: null,
-		catClickCount : [],
 		
 		cats : [{ 
 				  clickCount :0,
 				  name:"cuteCat",
-				  url: "images/image0.jpg"
+				  url: "images/image0.jpg",
+				  admin:false
 				},
 				{ 
 				  clickCount :0,
 				  name:"prettyCat",
-				  url: "images/image1.jpg"
+				  url: "images/image1.jpg",
+				  admin:false
 				},
 				{ 
 				  clickCount :0,
 				  name:"niceCat",
-				  url: "images/image2.jpg"
+				  url: "images/image2.jpg",
+				  admin:true
 				},
 				{ 
 				  clickCount :0,
 				  name:"cutiePie",
-				  url: "images/image3.jpg"
+				  url: "images/image3.jpg",
+				  admin:false
 				},
 				{ 
 				  clickCount :0,
 				  name:"NicePic",
-				  url: "images/image4.jpg"
+				  url: "images/image4.jpg",
+				  admin:false
 				},
 
 		],
 
 		init:function() {
-			for(var i = 0; i < model.catCount; i++) {
-				model.catClickCount[i] = 0;
-			}
- 		},
-
- 		updateCount: function(val) {
- 			model.catClickCount[val] = model.catClickCount[val] + 1;
  		},
 
  		setCurrentCat: function(selectedCat) {
@@ -59,6 +56,13 @@ $(document).ready(function(){
  			this.cats[this.curCatNum].clickCount = index;
  		},
 
+ 		setCurrentCatName: function(name) {
+ 			this.cats[this.curCatNum].name = name;
+ 		},
+
+ 		setCurrentCatUrl: function(url) {
+ 			this.cats[this.curCatNum].url = url;
+ 		},
 
  		getCurrentCatClickCount: function(index) {
  			return this.cats[index].clickCount;
@@ -70,10 +74,10 @@ $(document).ready(function(){
 			model.init();
 			view.init();
 			listView.init();
+			adminView.init();
 		},
 		
 		addCount: function(val) {
-			
 			this.setCurrentCatClickCount(this.getCurrentCatClickCount(val) + 1);
 			view.changeCountText();	
 		},
@@ -81,6 +85,7 @@ $(document).ready(function(){
 		setCurrentCat: function(index) {
 			model.setCurrentCat(index);
 			view.render(index);
+			adminView.render(index);
 		},
 
 		getCurrentCat: function() {
@@ -93,6 +98,14 @@ $(document).ready(function(){
 
  		setCurrentCatClickCount: function(index) {
  			model.setCurrentCatClickCount(index);
+ 		},
+
+ 		setCurrentCatName: function(name) {
+ 			model.setCurrentCatName(name);
+ 		},
+
+ 		setCurrentCatUrl: function(url) {
+ 			model.setCurrentCatUrl(url);
  		},
 
  		getCurrentCatClickCount: function(index) {
@@ -137,5 +150,41 @@ $(document).ready(function(){
 		}
 	};
 	
+	var adminView = {
+		init: function() {
+			this.render(0);			
+		},
+
+		render:function(index) {
+			if(controller.getSelectedCat(index).admin == true) {
+				$('#adminView').show();
+				this.showControls(index);
+			}
+			else {
+				$('#adminView').hide();
+			}
+
+			$('#saveButton').click(function(){
+				//alert($('#catNameInput').val());
+				var cat = controller.getSelectedCat(controller.getCurrentCat());
+				cat.name = $('#catNameInput').val();
+				cat.clickCount = $('#catClickCount').val();
+				cat.url = $('#catImgUrl').val();
+				
+			});
+
+			$('#cancelButton').click(function() {
+				$('#catNameInput').val(controller.getSelectedCat(controller.getCurrentCat()).name);	
+				$('#catClickCount').val(controller.getSelectedCat(controller.getCurrentCat()).clickCount);	
+				$('#catImgUrl').val(controller.getSelectedCat(controller.getCurrentCat()).url);	
+			});
+		},
+
+		showControls: function(index) {
+			$('#catNameInput').val(controller.getSelectedCat(index).name);	
+			$('#catClickCount').val(controller.getSelectedCat(index).clickCount);	
+			$('#catImgUrl').val(controller.getSelectedCat(index).url);	
+		}
+	};
 	controller.init();	
 });
